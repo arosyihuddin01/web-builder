@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import type { Document, HeadingNode, ListNode, Node, ParagraphNode, TextNode } from './types';
 import { defaultThemeTokens, resolveEditorControlsToClasses } from '../theme/tokens';
 import { isDocument, isNode } from '../schema/guards';
+import { resolveSizeModeToClasses } from '../schema/style';
 
 export type RendererOptions = {
   theme?: typeof defaultThemeTokens;
@@ -62,6 +63,19 @@ export function renderNode(node: Node): React.ReactNode {
           {node.children.map((c, i) => <React.Fragment key={i}>{renderNode(c)}</React.Fragment>)}
         </a>
       );
+    case 'frame': {
+      const sizeClasses = resolveSizeModeToClasses(node.style ?? {});
+      const style: React.CSSProperties = {};
+      if ((node.style?.sizingX ?? 'fixed') === 'fixed' && typeof node.style?.width === 'number') style.width = node.style.width;
+      if ((node.style?.sizingY ?? 'fixed') === 'fixed' && typeof node.style?.height === 'number') style.height = node.style.height;
+      return (
+        <div className={clsx('relative', sizeClasses)} style={style} data-node="frame">
+          {node.children.map((c, i) => (
+            <React.Fragment key={i}>{renderNode(c)}</React.Fragment>
+          ))}
+        </div>
+      );
+    }
     default:
       return null;
   }
