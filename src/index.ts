@@ -5,4 +5,6 @@ export * from './renderer/actions';
 export * from './renderer/history';
 export * from './renderer/TransformHandles';
 export * from './schema/guards';
+export * from './renderer/primitiveRegistry';
+export * from './renderer/recursiveRenderer';
 export * from './editor';
