@@ -1,0 +1,13 @@
+{
+  "name": "editor-shortcuts-grouping-zindex",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Minimal editor core with advanced keyboard shortcuts, grouping, and z-index inspector.",
+  "license": "MIT",
+  "scripts": {
+    "typecheck": "node -e \"console.log('No type system configured');\"",
+    "lint": "node -e \"console.log('No lint configured');\"",
+    "demo": "echo 'Open demo/index.html in a browser'"
+  }
+}
