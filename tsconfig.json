@@ -36,4 +36,13 @@
     "demo",
     "index.html"
   ]
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["src/*"]
+    },
+    "resolveJsonModule": true,
+    "moduleResolution": "node"
+  },
+  "include": ["src", "tests", "jest.setup.ts", "next-env.d.ts"]
 }

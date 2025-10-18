@@ -1,4 +1,18 @@
 {
   "extends": ["next/core-web-vitals", "prettier"],
   "rules": {}
+  "ignorePatterns": [
+    "demo/**",
+    "index.html",
+    "tests/**",
+    "jest.*",
+    "vitest.*",
+    "src/**",
+    "!src/app/**",
+    "!src/core/**",
+    "!src/store/**"
+  ],
+  "rules": {
+    "@next/next/no-img-element": "off"
+  }
 }

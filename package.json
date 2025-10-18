@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "description": "Next.js 13 App Router project with Tailwind and base editor layout.",
+  "description": "Minimal editor core with Next.js demo app, Tailwind, and recursive renderer.",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
@@ -30,5 +31,27 @@
     "prettier": "^3.2.5",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "demo": "echo 'Open demo/index.html in a browser'"
+  },
+  "dependencies": {
+    "next": "14.2.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "zod": "3.23.8",
+    "clsx": "2.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "20.12.12",
+    "@types/react": "18.2.66",
+    "@types/react-dom": "18.2.22",
+    "autoprefixer": "10.4.19",
+    "eslint": "8.57.0",
+    "eslint-config-next": "14.2.4",
+    "eslint-config-prettier": "9.1.0",
+    "postcss": "8.4.38",
+    "prettier": "3.2.5",
+    "tailwindcss": "3.4.7",
+    "typescript": "5.4.5"
   }
 }
