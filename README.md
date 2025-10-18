@@ -1,53 +1,32 @@
-# Renderer validation tests and theme token polish
+Advanced keyboard shortcuts, grouping, and z-index tools
 
-This repository contains a small React-based renderer, a Tailwind-like theme token system, and a suite of unit tests validating renderer mappings, action handling, and schema guards.
+This repository contains a minimal, framework-agnostic editor core implementing:
 
-## Overview
+- Keyboard shortcuts for undo/redo, copy/paste, duplicate, group/ungroup, align commands, and selection traversal.
+- Grouping functionality that wraps selected nodes into container components and manages z-index adjustments.
+- Z-index inspector overlay that provides visual feedback in a canvas/container.
+- Shortcut handling that is scoped to a container element to avoid global conflicts and remain accessible.
 
-- Theme tokens: A minimal Tailwind-compatible token map for spacing, color, and typography that can be driven by editor controls.
-- Renderer: Converts a simple document schema into React elements with utility classes derived from theme tokens.
-- Actions: Pure functions to update a document (toggle bold, set text color, set paragraph spacing).
-- Guards: Type guards ensuring only valid nodes and documents are processed by the renderer.
+Structure
 
-## Directory structure
+- src/editor/types.js: Core JSDoc-typed structures for nodes and state.
+- src/editor/state.js: CanvasState – immutable-style state with undo/redo history and operations.
+- src/editor/keyboard.js: ShortcutManager – binds keyboard shortcuts to a scope element.
+- src/ui/zindex-inspector.js: DOM overlay to visualize z-index ordering.
+- src/index.js: Public API exports.
 
-- src/theme/tokens.ts – Theme token definitions and a helper to map editor controls to class strings.
-- src/renderer/types.ts – Document schema types.
-- src/renderer/renderNode.tsx – React renderer for nodes and a high-level <Renderer /> component.
-- src/renderer/actions.ts – Action definitions and reducers to update a document tree.
-- src/schema/guards.ts – Type guards for Nodes and Documents.
-- tests/**/* – Jest + React Testing Library specs.
+Usage (vanilla, no bundler required)
 
-## Theming guidelines
+1) Include the scripts via <script type="module"> in a browser, for example in demo/index.html. Or import from src/* in your own project.
+2) Instantiate a CanvasState and a ShortcutManager scoped to a focusable container.
+3) Optional: create a z-index inspector overlay for visual feedback.
 
-The theme token contract lives in `src/theme/tokens.ts`.
+Accessibility and conflict-free behavior
 
-- Spacing tokens are coarse-grained, tuned to editor controls: `none`, `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `3xl`. Each maps to combined margin and padding utilities (e.g. `m-4 p-4`).
-- Color tokens map to semantic roles used by an editor’s toolbar or block inspector: `foreground`, `background`, `muted`, `primary`, `secondary`, `success`, `warning`, `danger`, `info`. These map to Tailwind text/background utilities.
-- Typography tokens cover `fontSize`, `fontWeight`, and line-height (`leading`) and are intentionally limited to sensible defaults for editor UX.
+- ShortcutManager only handles events when the scope element (or its descendants) are focused, so browser/system shortcuts outside the editor are unaffected.
+- It ignores keystrokes originating from editable elements (input, textarea, contenteditable), allowing assistive technology and text input workflows.
+- Uses well-known combinations (Ctrl/Cmd+Z, Y, Shift+Z, C/V/D, G/Shift+G) and Alt-modified arrow keys for alignment to avoid collisions with browser defaults.
 
-Use `resolveEditorControlsToClasses(tokens, control)` to translate selected editor controls into a class string to attach to rendered nodes.
+Note
 
-You can provide your own token set by passing it through the renderer in future extensions. The current implementation uses a `defaultThemeTokens` internally for simplicity.
-
-## Testing strategy
-
-This repo uses Jest + React Testing Library and runs in the jsdom environment.
-
-- renderNode mappings: We verify that each supported node type renders with the correct HTML tag and applies expected classes derived from theme tokens.
-- action handling: Reducer functions are tested to ensure state updates are pure and idempotent where appropriate (e.g., toggle bold on/off), and that editor-related attributes (spacing, color) are applied.
-- schema guards: Negative and positive cases validate the guard behavior, ensuring the renderer short-circuits on invalid input.
-- theme token resolution: Unit tests ensure editor control selections are converted into the correct Tailwind utility classes.
-
-## Local development
-
-- Install dependencies: `npm install`
-- Run tests once with coverage: `npm test`
-- Watch tests: `npm run test:watch`
-- Type check: `npm run typecheck`
-
-No external Tailwind dependency is required; the renderer simply outputs Tailwind utility class names.
-
-## Notes
-
-- CI configuration: The project is configured to run tests locally through npm scripts. You can integrate with your preferred CI by invoking `npm ci && npm test`. GitHub Actions or other workflow files are intentionally omitted here per guidelines.
+This is a minimal reference implementation intended for integration in a larger app. You can adapt the state model or UI integration as needed.
