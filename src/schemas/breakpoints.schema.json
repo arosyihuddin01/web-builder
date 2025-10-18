@@ -1,0 +1,8 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/schemas/breakpoints.schema.json",
+  "title": "Breakpoint",
+  "type": "string",
+  "enum": ["sm", "md", "lg"],
+  "description": "Responsive breakpoints using mobile-first min-widths: sm(0), md(640), lg(1024)."
+}
