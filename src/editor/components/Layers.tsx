@@ -8,7 +8,14 @@ function LayerItem({ node, depth = 0 }: { node: EditorNode; depth?: number }) {
   const isSelected = selection.includes(node.id);
   const onClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    select([node.id]);
+    const additive = e.metaKey || e.ctrlKey || e.shiftKey;
+    if (additive) {
+      const set = new Set(selection);
+      if (set.has(node.id)) set.delete(node.id); else set.add(node.id);
+      select(Array.from(set));
+    } else {
+      select([node.id]);
+    }
   };
   return (
     <div className={"pl-" + depth * 2}>

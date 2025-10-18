@@ -6,8 +6,12 @@ export type EditorContextValue = EditorState & {
   setTree: (tree: EditorNode) => void;
   select: (ids: string[]) => void;
   addNode: (parentId: string, node: EditorNode) => void;
-  undo: () => void; // placeholder
-  redo: () => void; // placeholder
+  updateNode: (id: string, patch: Partial<EditorNode>) => void;
+  updateNodeProps: (id: string, propsPatch: Record<string, unknown>) => void;
+  deleteSelection: () => void;
+  duplicateSelection: () => void;
+  undo: () => void;
+  redo: () => void;
 };
 
 const EditorContext = createContext<EditorContextValue | null>(null);
@@ -28,6 +32,15 @@ function findNodeById(node: EditorNode, id: string): EditorNode | null {
   return null;
 }
 
+function findParentOf(root: EditorNode, id: string, parent: EditorNode | null = null): EditorNode | null {
+  if (root.id === id) return parent;
+  for (const child of root.children ?? []) {
+    const p = findParentOf(child, id, root);
+    if (p) return p;
+  }
+  return null;
+}
+
 function cloneTree(node: EditorNode): EditorNode {
   return {
     ...node,
@@ -42,6 +55,27 @@ function addNodeToTree(tree: EditorNode, parentId: string, node: EditorNode): Ed
   if (!parent.children) parent.children = [];
   parent.children.push(node);
   return copy;
+}
+
+function removeNodeFromTree(tree: EditorNode, id: string): EditorNode {
+  if (tree.id === id) return tree; // do not remove root
+  const copy = cloneTree(tree);
+  function walk(n: EditorNode): void {
+    if (!n.children) return;
+    n.children = n.children.filter((c) => c.id !== id);
+    for (const c of n.children) walk(c);
+  }
+  walk(copy);
+  return copy;
+}
+
+function duplicateNode(node: EditorNode): EditorNode {
+  const newId = `${node.type}-${Math.random().toString(36).slice(2, 8)}`;
+  return {
+    ...node,
+    id: newId,
+    children: node.children?.map(duplicateNode)
+  };
 }
 
 export function EditorProvider({ children, initialTree }: { children: React.ReactNode; initialTree?: EditorNode }) {
@@ -80,6 +114,75 @@ export function EditorProvider({ children, initialTree }: { children: React.Reac
     });
   }, []);
 
+  const updateNode = useCallback((id: string, patch: Partial<EditorNode>) => {
+    setState((prev) => {
+      const copy = cloneTree(prev.tree);
+      const target = findNodeById(copy, id);
+      if (!target) return prev;
+      Object.assign(target, patch);
+      return {
+        ...prev,
+        tree: copy,
+        history: { past: [...prev.history.past, snapshotOf(prev)], future: [] }
+      };
+    });
+  }, []);
+
+  const updateNodeProps = useCallback((id: string, propsPatch: Record<string, unknown>) => {
+    setState((prev) => {
+      const copy = cloneTree(prev.tree);
+      const target = findNodeById(copy, id);
+      if (!target) return prev;
+      target.props = { ...(target.props ?? {}), ...propsPatch };
+      return {
+        ...prev,
+        tree: copy,
+        history: { past: [...prev.history.past, snapshotOf(prev)], future: [] }
+      };
+    });
+  }, []);
+
+  const deleteSelection = useCallback(() => {
+    setState((prev) => {
+      if (prev.selection.length === 0) return prev;
+      let nextTree = prev.tree;
+      for (const id of prev.selection) {
+        if (id === 'root') continue;
+        nextTree = removeNodeFromTree(nextTree, id);
+      }
+      return {
+        tree: nextTree,
+        selection: [],
+        history: { past: [...prev.history.past, snapshotOf(prev)], future: [] }
+      } as EditorState;
+    });
+  }, []);
+
+  const duplicateSelection = useCallback(() => {
+    setState((prev) => {
+      if (prev.selection.length === 0) return prev;
+      const copy = cloneTree(prev.tree);
+      const newIds: string[] = [];
+      for (const id of prev.selection) {
+        const node = findNodeById(copy, id);
+        if (!node) continue;
+        const parent = findParentOf(copy, id) ?? copy; // default to root
+        const dup = duplicateNode(node);
+        if (!parent.children) parent.children = [];
+        // insert after original if possible
+        const idx = parent.children.findIndex((c) => c.id === id);
+        parent.children.splice(idx >= 0 ? idx + 1 : parent.children.length, 0, dup);
+        newIds.push(dup.id);
+      }
+      return {
+        ...prev,
+        tree: copy,
+        selection: newIds,
+        history: { past: [...prev.history.past, snapshotOf(prev)], future: [] }
+      };
+    });
+  }, []);
+
   const undo = useCallback(() => {
     setState((prev) => {
       if (prev.history.past.length === 0) return prev;
@@ -111,7 +214,18 @@ export function EditorProvider({ children, initialTree }: { children: React.Reac
     });
   }, []);
 
-  const value = useMemo<EditorContextValue>(() => ({ ...state, setTree, select, addNode, undo, redo }), [state, setTree, select, addNode, undo, redo]);
+  const value = useMemo<EditorContextValue>(() => ({
+    ...state,
+    setTree,
+    select,
+    addNode,
+    updateNode,
+    updateNodeProps,
+    deleteSelection,
+    duplicateSelection,
+    undo,
+    redo
+  }), [state, setTree, select, addNode, updateNode, updateNodeProps, deleteSelection, duplicateSelection, undo, redo]);
 
   return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>;
 }
