@@ -1,7 +1,9 @@
 # Dependencies
 node_modules/
 
-# Build outputshttps://github.com/arosyihuddin01/web-builder/pull/4/conflict?name=.gitignore&base_oid=9a40e8e0947fd517f6d353cf48eb3531978178ee&head_oid=c5dbb94ef68ca2d8e417ece88c327691cb90e8c1
+# Build outputs
+.next/
+out/
 dist/
 build/
 
@@ -18,6 +20,10 @@ Thumbs.db
 # Editors
 .vscode/
 .idea/
+
+# Vercel / Turbo
+.vercel
+.turbo
 
 # Misc
 *.tmp
