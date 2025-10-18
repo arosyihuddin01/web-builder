@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/schemas/element.schema.json",
+  "title": "ElementModel",
+  "type": "object",
+  "required": ["id", "base", "overrides"],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "base": {
+      "type": "object",
+      "properties": {
+        "style": { "type": "object", "additionalProperties": true },
+        "props": { "type": "object", "additionalProperties": true }
+      },
+      "additionalProperties": false
+    },
+    "overrides": {
+      "type": "object",
+      "properties": {
+        "sm": {
+          "type": "object",
+          "properties": {
+            "style": { "type": "object", "additionalProperties": true },
+            "props": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": false
+        },
+        "md": {
+          "type": "object",
+          "properties": {
+            "style": { "type": "object", "additionalProperties": true },
+            "props": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": false
+        },
+        "lg": {
+          "type": "object",
+          "properties": {
+            "style": { "type": "object", "additionalProperties": true },
+            "props": { "type": "object", "additionalProperties": true }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
