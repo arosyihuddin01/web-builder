@@ -6,3 +6,4 @@ export * from './renderer/history';
 export * from './renderer/TransformHandles';
 export * from './schema/guards';
 export * from './editor';
+export * from './canvas/snapping';
