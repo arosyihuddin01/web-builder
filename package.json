@@ -1,8 +1,9 @@
 {
-  "name": "editor-shortcuts-grouping-zindex",
+  "name": "editor-app",
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "description": "Next.js 13 App Router project with Tailwind and base editor layout.",
   "description": "Minimal editor core with Next.js demo app, Tailwind, and recursive renderer.",
   "license": "MIT",
   "scripts": {
@@ -10,6 +11,26 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier -w \"**/*\"",
+    "format:check": "prettier -c \"**/*\""
+  },
+  "dependencies": {
+    "next": "13.5.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.2.21",
+    "@types/react-dom": "^18.2.7",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "13.5.6",
+    "postcss": "^8.4.32",
+    "prettier": "^3.2.5",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.4.5"
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "demo": "echo 'Open demo/index.html in a browser'"
   },
