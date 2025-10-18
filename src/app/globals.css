@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Simple styles for primitive Button variants used in demos */
+@layer components {
+  .btn-primary {
+    @apply bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition;
+  }
+  .btn-secondary {
+    @apply bg-gray-200 text-gray-900 px-4 py-2 rounded-md hover:bg-gray-300 transition;
+  }
+  .btn-ghost {
+    @apply bg-transparent text-blue-600 px-4 py-2 rounded-md hover:bg-blue-50 transition;
+  }
+}
