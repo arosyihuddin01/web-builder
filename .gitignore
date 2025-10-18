@@ -2,6 +2,7 @@
 node_modules/
 
 # Build outputs
+.next/
 dist/
 build/
 
@@ -22,3 +23,4 @@ Thumbs.db
 # Misc
 *.tmp
 *.log
+.vercel
