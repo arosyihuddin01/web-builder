@@ -38,7 +38,13 @@ export type LinkNode = {
   children: Node[];
 };
 
-export type Node = TextNode | HeadingNode | ParagraphNode | ListNode | ListItemNode | LinkNode;
+export type FrameNode = {
+  type: 'frame';
+  children: Node[];
+  style?: import('../schema/style').SizeStyle;
+};
+
+export type Node = TextNode | HeadingNode | ParagraphNode | ListNode | ListItemNode | LinkNode | FrameNode;
 
 export type Document = {
   type: 'doc';
