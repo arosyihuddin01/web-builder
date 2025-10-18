@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Editor Demo – Shortcuts, Grouping, and Z-index Inspector</title>
+    <style>
+      html, body { height: 100%; margin: 0; }
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+      .app { display: grid; grid-template-rows: auto 1fr; height: 100%; }
+      .toolbar { display:flex; gap:8px; align-items:center; padding:8px; border-bottom:1px solid #ddd; background:#fafafa; }
+      .canvas-shell { position: relative; height: 100%; }
+      .canvas { position: absolute; inset: 0; background: #f3f5f7; outline: none; }
+      .node { position: absolute; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+      .node.selected { outline: 2px solid #4b8cf5; }
+      .btn { padding:6px 10px; border:1px solid #ccc; border-radius:6px; background:white; cursor:pointer; }
+      .btn:active { transform: translateY(1px); }
+      .hint { margin-left: auto; color:#666; font-size:12px; }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="toolbar">
+        <button class="btn" data-action="group">Group (Cmd/Ctrl+G)</button>
+        <button class="btn" data-action="ungroup">Ungroup (Cmd/Ctrl+Shift+G)</button>
+        <button class="btn" data-action="bringFront">To Front (Cmd/Ctrl+Shift+])</button>
+        <button class="btn" data-action="sendBack">To Back (Cmd/Ctrl+Shift+[)</button>
+        <span class="hint">Try: Cmd/Ctrl+Z/Y, C/V/D, G/Shift+G, Cmd/Ctrl+Alt+Arrows for align, Tab to traverse</span>
+      </div>
+      <div class="canvas-shell">
+        <div id="canvas" class="canvas" tabindex="0"></div>
+      </div>
+    </div>
+    <script type="module" src="./demo.js"></script>
+  </body>
+</html>

@@ -5,4 +5,4 @@ export * from './renderer/actions';
 export * from './renderer/history';
 export * from './renderer/TransformHandles';
 export * from './schema/guards';
-export * from './schema/style';
+export * from './editor';
